@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teruel Rural — Alquiler de larga estancia en el medio rural</title>
+  <meta name="description"
+    content="Encuentra tu hogar rural en Teruel. Alquileres de larga estancia en masías, casas rurales y cortijos rodeados de naturaleza." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">🏡</span>
+        <span class="logo-text">Teruel<span class="logo-accent">Rural</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#propiedades">Propiedades</a></li>
+        <li><a href="#por-que">¿Por qué Teruel?</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <button class="nav-cta glass">Publicar propiedad</button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <header class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-tag glass-pill">🌿 Larga estancia en el medio rural</p>
+      <h1 class="hero-title">Descubre tu hogar<br /><span class="hero-accent">en Teruel</span></h1>
+      <p class="hero-subtitle">Masías, casas rurales y cortijos para vivir rodeado de naturaleza.<br />Alquileres desde
+        1 mes. Sin prisas, sin agobios.</p>
+
+      <!-- Search Container -->
+      <div class="search-container" id="searchContainer">
+        <!-- Tab Selector -->
+        <div class="search-tabs">
+          <button class="search-tab active" data-tab="alquilar">Alquilar</button>
+          <button class="search-tab" data-tab="compartir">Compartir</button>
+          <button class="search-tab" data-tab="comprar">Comprar</button>
+        </div>
+
+        <!-- Main Search Bar -->
+        <div class="search-bar glass" id="searchBar">
+          <div class="search-field">
+            <label for="search-zona">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              Ubicación
+            </label>
+            <select id="search-zona">
+              <option value="">Todas las comarcas</option>
+              <option>Matarraña</option>
+              <option>Maestrazgo</option>
+              <option>Gúdar-Javalambre</option>
+              <option>Sierra de Albarracín</option>
+              <option>Bajo Aragón</option>
+              <option>Cuencas Mineras</option>
+              <option>Jiloca</option>
+              <option>Comunidad de Teruel</option>
+            </select>
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-field">
+            <label for="search-tipo">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+              Tipo de inmueble
+            </label>
+            <select id="search-tipo">
+              <option value="">Todos los tipos</option>
+              <option>Masía</option>
+              <option>Casa rural</option>
+              <option>Cortijo</option>
+              <option>Apartamento</option>
+              <option>Casa de pueblo</option>
+              <option>Finca rústica</option>
+            </select>
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-field">
+            <label for="search-precio">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+              Precio máx.
+            </label>
+            <select id="search-precio">
+              <option value="">Sin límite</option>
+              <option value="200">200 €/mes</option>
+              <option value="300">300 €/mes</option>
+              <option value="500">500 €/mes</option>
+              <option value="700">700 €/mes</option>
+              <option value="1000">1.000 €/mes</option>
+              <option value="1500">1.500 €/mes</option>
+            </select>
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-field">
+            <label for="search-estancia">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              Estancia mínima
+            </label>
+            <select id="search-estancia">
+              <option value="">Cualquiera</option>
+              <option value="1">1 mes</option>
+              <option value="3">3 meses</option>
+              <option value="6">6 meses</option>
+              <option value="12">1 año</option>
+            </select>
+          </div>
+          <button class="search-btn" id="searchBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <span>Buscar</span>
+          </button>
+        </div>
+
+        <!-- Advanced Filters Toggle -->
+        <button class="advanced-toggle" id="advancedToggle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="21" x2="4" y2="14" />
+            <line x1="4" y1="10" x2="4" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12" y2="3" />
+            <line x1="20" y1="21" x2="20" y2="16" />
+            <line x1="20" y1="12" x2="20" y2="3" />
+            <line x1="1" y1="14" x2="7" y2="14" />
+            <line x1="9" y1="8" x2="15" y2="8" />
+            <line x1="17" y1="16" x2="23" y2="16" />
+          </svg>
+          <span>Filtros avanzados</span>
+          <svg class="toggle-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+
+        <!-- Advanced Filters Panel -->
+        <div class="advanced-panel glass" id="advancedPanel">
+          <div class="advanced-grid">
+            <!-- Habitaciones -->
+            <div class="filter-group">
+              <label class="filter-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 4v16" />
+                  <path d="M2 8h18a2 2 0 0 1 2 2v10" />
+                  <path d="M2 17h20" />
+                  <path d="M6 8v9" />
+                </svg>
+                Habitaciones
+              </label>
+              <div class="filter-chip-group" id="filterBeds">
+                <button class="filter-chip active" data-value="">Todas</button>
+                <button class="filter-chip" data-value="1">1</button>
+                <button class="filter-chip" data-value="2">2</button>
+                <button class="filter-chip" data-value="3">3</button>
+                <button class="filter-chip" data-value="4">4+</button>
+              </div>
+            </div>
+
+            <!-- Baños -->
+            <div class="filter-group">
+              <label class="filter-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z" />
+                  <path d="M6 12V5a2 2 0 0 1 2-2h3v2.25" />
+                </svg>
+                Baños
+              </label>
+              <div class="filter-chip-group" id="filterBaths">
+                <button class="filter-chip active" data-value="">Todos</button>
+                <button class="filter-chip" data-value="1">1</button>
+                <button class="filter-chip" data-value="2">2+</button>
+                <button class="filter-chip" data-value="3">3+</button>
+              </div>
+            </div>
+
+            <!-- Superficie -->
+            <div class="filter-group">
+              <label class="filter-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M3 9h18" />
+                  <path d="M9 21V9" />
+                </svg>
+                Superficie mínima
+              </label>
+              <div class="range-slider-container">
+                <input type="range" class="range-slider" id="filterArea" min="0" max="400" value="0" step="25" />
+                <div class="range-value" id="filterAreaValue">Cualquiera</div>
+              </div>
+            </div>
+
+            <!-- Precio Range -->
+            <div class="filter-group">
+              <label class="filter-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+                Rango de precio
+              </label>
+              <div class="price-range">
+                <div class="price-input-wrap">
+                  <span class="price-currency">€</span>
+                  <input type="number" class="price-input" id="priceMin" placeholder="Mín" min="0" step="50" />
+                </div>
+                <span class="price-dash">—</span>
+                <div class="price-input-wrap">
+                  <span class="price-currency">€</span>
+                  <input type="number" class="price-input" id="priceMax" placeholder="Máx" min="0" step="50" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Extras -->
+          <div class="filter-extras">
+            <label class="filter-label" style="margin-bottom: 12px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Características
+            </label>
+            <div class="extras-grid">
+              <label class="checkbox-card glass" id="extra-wifi">
+                <input type="checkbox" value="WiFi" />
+                <span class="checkbox-icon">📶</span>
+                <span class="checkbox-text">WiFi / Fibra</span>
+              </label>
+              <label class="checkbox-card glass" id="extra-chimenea">
+                <input type="checkbox" value="Chimenea" />
+                <span class="checkbox-icon">🔥</span>
+                <span class="checkbox-text">Chimenea</span>
+              </label>
+              <label class="checkbox-card glass" id="extra-huerto">
+                <input type="checkbox" value="Huerto" />
+                <span class="checkbox-icon">🌱</span>
+                <span class="checkbox-text">Huerto</span>
+              </label>
+              <label class="checkbox-card glass" id="extra-garaje">
+                <input type="checkbox" value="Garaje" />
+                <span class="checkbox-icon">🚗</span>
+                <span class="checkbox-text">Garaje</span>
+              </label>
+              <label class="checkbox-card glass" id="extra-piscina">
+                <input type="checkbox" value="Piscina" />
+                <span class="checkbox-icon">🏊</span>
+                <span class="checkbox-text">Piscina</span>
+              </label>
+              <label class="checkbox-card glass" id="extra-mascotas">
+                <input type="checkbox" value="Mascotas" />
+                <span class="checkbox-icon">🐾</span>
+                <span class="checkbox-text">Mascotas</span>
+              </label>
+              <label class="checkbox-card glass" id="extra-calefaccion">
+                <input type="checkbox" value="Calefacción" />
+                <span class="checkbox-icon">♨️</span>
+                <span class="checkbox-text">Calefacción</span>
+              </label>
+              <label class="checkbox-card glass" id="extra-amueblado">
+                <input type="checkbox" value="Amueblado" />
+                <span class="checkbox-icon">🛋️</span>
+                <span class="checkbox-text">Amueblado</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Panel Actions -->
+          <div class="advanced-actions">
+            <button class="action-clear" id="clearFilters">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+              Limpiar filtros
+            </button>
+            <div class="filter-results-count">
+              <span id="resultsCount">6</span> propiedades encontradas
+            </div>
+            <button class="action-apply" id="applyFilters">
+              Aplicar filtros
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Explora</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </header>
+
+  <!-- ═══════════════ PROPERTIES ═══════════════ -->
+  <section class="section properties" id="propiedades">
+    <div class="container">
+      <div class="section-header fade-in">
+        <p class="section-tag">Propiedades destacadas</p>
+        <h2 class="section-title">Encuentra tu lugar</h2>
+        <p class="section-desc">Propiedades seleccionadas en las comarcas más bonitas de Teruel, listas para estancias
+          largas.</p>
+      </div>
+      <div class="properties-grid" id="propertiesGrid">
+        <!-- Cards rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ WHY TERUEL ═══════════════ -->
+  <section class="section why-teruel" id="por-que">
+    <div class="why-bg"></div>
+    <div class="container">
+      <div class="section-header fade-in">
+        <p class="section-tag">¿Por qué Teruel?</p>
+        <h2 class="section-title">Un territorio por descubrir</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card glass fade-in">
+          <div class="stat-icon">🏔️</div>
+          <div class="stat-number" data-target="236">0</div>
+          <div class="stat-label">Municipios con encanto</div>
+        </div>
+        <div class="stat-card glass fade-in">
+          <div class="stat-icon">💰</div>
+          <div class="stat-number" data-target="350" data-prefix="~" data-suffix=" €">0</div>
+          <div class="stat-label">Alquiler medio / mes</div>
+        </div>
+        <div class="stat-card glass fade-in">
+          <div class="stat-icon">🌲</div>
+          <div class="stat-number" data-target="14" data-suffix=" mil">0</div>
+          <div class="stat-label">km² de naturaleza</div>
+        </div>
+        <div class="stat-card glass fade-in">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-number" data-target="3" data-suffix=" Patrimonios">0</div>
+          <div class="stat-label">de la Humanidad (UNESCO)</div>
+        </div>
+      </div>
+      <div class="why-features fade-in">
+        <div class="why-feature glass">
+          <div class="feature-icon">🌐</div>
+          <h3>Fibra óptica rural</h3>
+          <p>Cada vez más municipios cuentan con conexión de alta velocidad. Teletrabaja desde donde quieras.</p>
+        </div>
+        <div class="why-feature glass">
+          <div class="feature-icon">🏥</div>
+          <h3>Servicios esenciales</h3>
+          <p>Centros de salud, colegios y comercios locales que mantienen viva la comunidad.</p>
+        </div>
+        <div class="why-feature glass">
+          <div class="feature-icon">🚗</div>
+          <h3>A 2h de grandes ciudades</h3>
+          <p>Zaragoza, Valencia y Barcelona están a un paso. Lo mejor de dos mundos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ CTA ═══════════════ -->
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-card glass fade-in">
+        <h2>¿Tienes una propiedad rural en Teruel?</h2>
+        <p>Publica gratis tu masía, casa rural o cortijo y encuentra inquilinos de larga estancia.</p>
+        <button class="cta-btn">Publicar gratis</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="footer" id="contacto">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">
+            <span class="logo-icon">🏡</span>
+            <span class="logo-text">Teruel<span class="logo-accent">Rural</span></span>
+          </a>
+          <p>Conectamos personas con hogares rurales en Teruel. Alquileres de larga estancia para quienes buscan una
+            vida más tranquila.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="#propiedades">Propiedades</a></li>
+            <li><a href="#por-que">¿Por qué Teruel?</a></li>
+            <li><a href="#">Comarcas</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Soporte</h4>
+          <ul>
+            <li><a href="#">Centro de ayuda</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li><a href="#">Términos</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Comunidad</h4>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Guía del nuevo rural</a></li>
+            <li><a href="#">Testimonios</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 TeruelRural. Hecho con ❤️ desde Teruel.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
