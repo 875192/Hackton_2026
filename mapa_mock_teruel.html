@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teruel · Municipios + círculos (mock, sin GeoJSON)</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+
+  <style>
+    html, body { margin: 0; height: 100%; font-family: Arial, sans-serif; }
+    #map { width: 100%; height: 100%; background: #f5f7fa; }
+
+    .panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      padding: 12px 14px;
+      width: 390px;
+    }
+    .panel h1 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    .panel p {
+      margin: 0;
+      font-size: 12px;
+      color: #555;
+      line-height: 1.35;
+    }
+
+    .legend {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      padding: 10px 12px;
+      width: 270px;
+      font-size: 12px;
+    }
+    .legend h3 {
+      margin: 0 0 8px;
+      font-size: 13px;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+    }
+    .dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.15);
+      flex: 0 0 auto;
+    }
+
+    .kpi {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      padding: 10px 12px;
+      width: 270px;
+      font-size: 12px;
+    }
+    .kpi h3 { margin: 0 0 8px; font-size: 13px; }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .kpi-card {
+      background: #f7f9fc;
+      border: 1px solid #e6edf5;
+      border-radius: 8px;
+      padding: 8px;
+    }
+    .kpi-label { color: #667; font-size: 11px; margin-bottom: 4px; }
+    .kpi-value { font-size: 15px; font-weight: bold; color: #222; }
+
+    .leaflet-tooltip {
+      font-size: 12px;
+    }
+
+    .badge-mock {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      padding: 8px 10px;
+      font-size: 12px;
+      color: #444;
+    }
+    .badge-mock b { color: #111; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <div class="panel">
+    <h1>Provincia de Teruel · Municipios con círculos de intensidad</h1>
+    <p>
+      Prototipo visual <b>sin GeoJSON</b>: se muestran municipios como puntos (coordenadas aproximadas)
+      y círculos solo en los municipios con información disponible. Los valores son simulados.
+    </p>
+  </div>
+
+  <div class="badge-mock"><b>Modo:</b> Mock visual sin GeoJSON</div>
+
+  <div class="legend">
+    <h3>Intensidad del círculo (mock)</h3>
+    <div class="legend-row"><span class="dot" style="background:#fff7bc"></span> Baja</div>
+    <div class="legend-row"><span class="dot" style="background:#fec44f"></span> Media</div>
+    <div class="legend-row"><span class="dot" style="background:#fe9929"></span> Alta</div>
+    <div class="legend-row"><span class="dot" style="background:#d95f0e"></span> Muy alta</div>
+    <div class="legend-row"><span class="dot" style="background:#bdbdbd"></span> Sin información</div>
+    <div style="margin-top:8px;color:#666;">
+      Tamaño y color del círculo escalan con la tasa de vivienda vacía (simulada).
+    </div>
+  </div>
+
+  <div class="kpi">
+    <h3>Resumen visual (mock)</h3>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Municipios</div>
+        <div class="kpi-value" id="kpiTotal">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Con info</div>
+        <div class="kpi-value" id="kpiConInfo">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Media (%)</div>
+        <div class="kpi-value" id="kpiMedia">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Máx (%)</div>
+        <div class="kpi-value" id="kpiMax">--</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <script>
+    // ============================
+    // CONFIG
+    // ============================
+    const TERUEL_CENTER = [40.65, -1.10];
+
+    const map = L.map("map").setView(TERUEL_CENTER, 8);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+
+    const circulosLayer = L.layerGroup().addTo(map);
+    const puntosBaseLayer = L.layerGroup().addTo(map);
+
+    // ============================
+    // MUNICIPIOS (puntos) - coordenadas aproximadas para prototipo
+    // ============================
+    // Nota: son coordenadas aproximadas para maqueta visual.
+    const MUNICIPIOS = [
+      { cod: "44189", nombre: "Teruel", lat: 40.3456, lng: -1.1065 },
+      { cod: "44013", nombre: "Alcañiz", lat: 41.0500, lng: -0.1300 },
+      { cod: "44008", nombre: "Andorra", lat: 40.9760, lng: -0.4430 },
+      { cod: "44238", nombre: "Utrillas", lat: 40.8130, lng: -0.8440 },
+      { cod: "44051", nombre: "Calamocha", lat: 40.9200, lng: -1.3000 },
+      { cod: "44025", nombre: "Albarracín", lat: 40.4080, lng: -1.4450 },
+      { cod: "44157", nombre: "Mora de Rubielos", lat: 40.2530, lng: -0.7520 },
+      { cod: "44153", nombre: "Monreal del Campo", lat: 40.7880, lng: -1.3540 },
+      { cod: "44016", nombre: "Alcorisa", lat: 40.8910, lng: -0.3810 },
+      { cod: "44195", nombre: "Valderrobres", lat: 40.8760, lng: 0.1540 },
+      { cod: "44014", nombre: "Alcañiz (entorno)", lat: 41.0200, lng: -0.1800 },
+      { cod: "44052", nombre: "Calanda", lat: 40.9420, lng: -0.2340 },
+      { cod: "44166", nombre: "Montalbán", lat: 40.8360, lng: -0.8010 },
+      { cod: "44103", nombre: "Híjar", lat: 41.1730, lng: -0.4470 },
+      { cod: "44109", nombre: "La Puebla de Híjar", lat: 41.2200, lng: -0.4430 },
+      { cod: "44180", nombre: "Santa Eulalia", lat: 40.5670, lng: -1.3130 },
+      { cod: "44074", nombre: "Cella", lat: 40.4550, lng: -1.2860 },
+      { cod: "44216", nombre: "Tramacastiel (mock)", lat: 40.1900, lng: -1.2400 },
+      { cod: "44058", nombre: "Cantavieja", lat: 40.5290, lng: -0.4050 },
+      { cod: "44135", nombre: "Mas de las Matas", lat: 40.8330, lng: -0.2420 },
+      { cod: "44112", nombre: "Iglesuela del Cid", lat: 40.4820, lng: -0.3190 },
+      { cod: "44178", nombre: "Sarrión", lat: 40.1410, lng: -0.8160 },
+      { cod: "44170", nombre: "Mosqueruela", lat: 40.3610, lng: -0.4490 },
+      { cod: "44121", nombre: "Javalambre (Camarena)", lat: 40.1400, lng: -1.0400 },
+      { cod: "44076", nombre: "Cedrillas", lat: 40.4360, lng: -0.8530 },
+      { cod: "44138", nombre: "Mas de los Olmos", lat: 40.7900, lng: -0.2610 },
+      { cod: "44085", nombre: "Escucha", lat: 40.7950, lng: -0.8090 },
+      { cod: "44070", nombre: "Castellote", lat: 40.8000, lng: -0.3200 },
+      { cod: "44162", nombre: "Morella área limítrofe (mock)", lat: 40.7300, lng: -0.1000 },
+      { cod: "44144", nombre: "Mirambel", lat: 40.5880, lng: -0.3420 }
+    ];
+
+    // ============================
+    // HELPERS
+    // ============================
+    function colorByRate(v) {
+      if (v == null) return "#bdbdbd";
+      if (v < 8) return "#fff7bc";
+      if (v < 14) return "#fec44f";
+      if (v < 22) return "#fe9929";
+      return "#d95f0e";
+    }
+
+    function radiusByRate(v) {
+      if (v == null) return 0;
+      return Math.max(6, Math.min(24, 6 + v * 0.45));
+    }
+
+    function buildMockDataForMunicipios(municipios) {
+      const out = {};
+      municipios.forEach((m, idx) => {
+        const hasInfo = Math.random() < 0.72; // ~72% con info
+        if (!hasInfo) return;
+
+        const tasa = +(5 + Math.random() * 28 + (idx % 4) * 0.7).toFixed(1);
+
+        // Generamos consistencia básica entre vacías / totales
+        const viviendasTotales = Math.round(500 + Math.random() * 5500);
+        const viviendasVacias = Math.min(
+          viviendasTotales,
+          Math.round(viviendasTotales * (tasa / 100))
+        );
+
+        out[m.cod] = {
+          tasa_vacia_pct: tasa,
+          viviendas_vacias: viviendasVacias,
+          viviendas_totales: viviendasTotales
+        };
+      });
+      return out;
+    }
+
+    function updateKpis(municipios, data) {
+      const total = municipios.length;
+      const vals = [];
+
+      municipios.forEach(m => {
+        if (data[m.cod] && data[m.cod].tasa_vacia_pct != null) {
+          vals.push(data[m.cod].tasa_vacia_pct);
+        }
+      });
+
+      const conInfo = vals.length;
+      const media = conInfo ? (vals.reduce((a,b)=>a+b,0)/conInfo).toFixed(1) : "--";
+      const max = conInfo ? Math.max(...vals).toFixed(1) : "--";
+
+      document.getElementById("kpiTotal").textContent = total.toLocaleString("es-ES");
+      document.getElementById("kpiConInfo").textContent = conInfo.toLocaleString("es-ES");
+      document.getElementById("kpiMedia").textContent = media;
+      document.getElementById("kpiMax").textContent = max;
+    }
+
+    // ============================
+    // DIBUJO (SIN GEOJSON)
+    // ============================
+    const mockData = buildMockDataForMunicipios(MUNICIPIOS);
+
+    // Marcadores base (municipio) + círculos cuando hay información
+    const bounds = [];
+
+    MUNICIPIOS.forEach(m => {
+      bounds.push([m.lat, m.lng]);
+
+      const info = mockData[m.cod] || null;
+
+      // Punto base del municipio (siempre visible)
+      const baseMarker = L.circleMarker([m.lat, m.lng], {
+        radius: 3,
+        color: "#6b7280",
+        weight: 1,
+        fillColor: "#9ca3af",
+        fillOpacity: 0.9
+      });
+
+      let baseTooltip = `<b>${m.nombre}</b><br>Código: ${m.cod}<br>`;
+      if (info) {
+        baseTooltip += `Tasa vacía (mock): <b>${info.tasa_vacia_pct}%</b><br>`;
+        baseTooltip += `Viviendas vacías: ${info.viviendas_vacias.toLocaleString("es-ES")}<br>`;
+        baseTooltip += `Viviendas totales: ${info.viviendas_totales.toLocaleString("es-ES")}<br>`;
+        baseTooltip += `<span style="color:#666">(dato simulado)</span>`;
+      } else {
+        baseTooltip += `<span style="color:#666">Sin información (mock)</span>`;
+      }
+
+      baseMarker.bindTooltip(baseTooltip, { sticky: true }).addTo(puntosBaseLayer);
+
+      // Círculo de intensidad solo si hay información
+      if (info) {
+        const circle = L.circleMarker([m.lat, m.lng], {
+          radius: radiusByRate(info.tasa_vacia_pct),
+          color: "#5a3d00",
+          weight: 1,
+          fillColor: colorByRate(info.tasa_vacia_pct),
+          fillOpacity: 0.80
+        });
+
+        circle.bindTooltip(`
+          <b>${m.nombre}</b><br>
+          Tasa vacía (mock): <b>${info.tasa_vacia_pct}%</b><br>
+          Viviendas vacías: ${info.viviendas_vacias.toLocaleString("es-ES")}<br>
+          Viviendas totales: ${info.viviendas_totales.toLocaleString("es-ES")}<br>
+          <span style="color:#666">(círculo sobre municipio con información)</span>
+        `, { sticky: true });
+
+        circle.addTo(circulosLayer);
+      }
+    });
+
+    // Ajustar vista a los puntos
+    if (bounds.length) {
+      map.fitBounds(bounds, { padding: [30, 30] });
+    }
+
+    // Guía visual opcional: halo aproximado provincia (solo estética mock)
+    L.circle(TERUEL_CENTER, {
+      radius: 90000,
+      color: "#9ca3af",
+      weight: 1,
+      dashArray: "4,4",
+      fill: false,
+      opacity: 0.6
+    }).addTo(map);
+
+    updateKpis(MUNICIPIOS, mockData);
+  </script>
+</body>
+</html>
